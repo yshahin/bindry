@@ -4,6 +4,8 @@ import { calculateBookletLayout, findOptimalSheetsPerBooklet } from './utils/boo
 import { detectTextDirection, inferDirectionFromFilename } from './utils/rtlDetector'
 import './App.css'
 
+const getRangePageCount = (start, end) => Math.max(0, end - start + 1)
+
 function App() {
   const [pdfFile, setPdfFile] = useState(null)
   const [totalPages, setTotalPages] = useState(0)
@@ -17,6 +19,48 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [detecting, setDetecting] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const [rangeStart, setRangeStart] = useState(1)
+  const [rangeEnd, setRangeEnd] = useState(0)
+
+  const applyRangeLayout = useCallback((options = {}) => {
+    const pdfCapacity = options.pdfTotalPages ?? totalPages
+    if (!pdfCapacity || pdfCapacity <= 0) {
+      setLayout(null)
+      return null
+    }
+
+    const startValue = Math.min(Math.max(1, options.rangeStart ?? rangeStart), pdfCapacity)
+    const endValue = Math.min(
+      Math.max(startValue, options.rangeEnd ?? rangeEnd),
+      pdfCapacity,
+    )
+
+    const rangeLength = getRangePageCount(startValue, endValue)
+    if (rangeLength <= 0) {
+      setLayout(null)
+      return null
+    }
+
+    const isRTL = options.isRTL ?? textDirection === 'rtl'
+    const sheetsValue = options.sheetsPerBooklet ?? sheetsPerBooklet
+    const perSheetValue = options.pagesPerSheet ?? pagesPerSheet
+
+    try {
+      const calculatedLayout = calculateBookletLayout(rangeLength, sheetsValue, perSheetValue, isRTL)
+      const enrichedLayout = {
+        ...calculatedLayout,
+        rangeStart: startValue,
+        rangeEnd: endValue,
+        isRTL,
+      }
+      setLayout(enrichedLayout)
+      setError(null)
+      return enrichedLayout
+    } catch (err) {
+      setError(err.message)
+      return null
+    }
+  }, [pagesPerSheet, rangeEnd, rangeStart, sheetsPerBooklet, textDirection, totalPages])
 
   const handleFileUpload = useCallback(async (event) => {
     const file = event.target.files[0]
@@ -42,6 +86,10 @@ function App() {
 
       setPdfFile(file)
       setTotalPages(pages)
+      const defaultStart = 1
+      const defaultEnd = pages
+      setRangeStart(defaultStart)
+      setRangeEnd(defaultEnd)
 
       // Detect text direction
       let detectedDir = initialDirection || 'ltr'
@@ -62,8 +110,13 @@ function App() {
         const isRTL = detectedDir === 'rtl'
         const optimalSheets = findOptimalSheetsPerBooklet(pages, pagesPerSheet)
         setSheetsPerBooklet(optimalSheets)
-        const calculatedLayout = calculateBookletLayout(pages, optimalSheets, pagesPerSheet, isRTL)
-        setLayout(calculatedLayout)
+        applyRangeLayout({
+          rangeStart: defaultStart,
+          rangeEnd: defaultEnd,
+          sheetsPerBooklet: optimalSheets,
+          isRTL,
+          pdfTotalPages: pages,
+        })
       }
     } catch (err) {
       setError(`Error reading PDF: ${err.message}`)
@@ -76,34 +129,22 @@ function App() {
       setLoading(false)
       setDetecting(false)
     }
-  }, [pagesPerSheet, textDirection])
+  }, [applyRangeLayout, pagesPerSheet])
 
   const handleSheetsPerBookletChange = (value) => {
     const newValue = parseInt(value) || 4
     if (newValue > 0) {
       setSheetsPerBooklet(newValue)
-      if (totalPages > 0) {
-        try {
-          const isRTL = textDirection === 'rtl'
-          const calculatedLayout = calculateBookletLayout(totalPages, newValue, pagesPerSheet, isRTL)
-          setLayout(calculatedLayout)
-        } catch (err) {
-          setError(err.message)
-        }
+      if (getRangePageCount(rangeStart, rangeEnd) > 0) {
+        applyRangeLayout({ sheetsPerBooklet: newValue })
       }
     }
   }
 
   const handleTextDirectionChange = (direction) => {
     setTextDirection(direction)
-    if (totalPages > 0) {
-      try {
-        const isRTL = direction === 'rtl'
-        const calculatedLayout = calculateBookletLayout(totalPages, sheetsPerBooklet, pagesPerSheet, isRTL)
-        setLayout(calculatedLayout)
-      } catch (err) {
-        setError(err.message)
-      }
+    if (getRangePageCount(rangeStart, rangeEnd) > 0) {
+      applyRangeLayout({ isRTL: direction === 'rtl' })
     }
   }
 
@@ -111,29 +152,51 @@ function App() {
     const newValue = parseInt(value) || 2
     if (newValue > 0 && newValue % 2 === 0) {
       setPagesPerSheet(newValue)
-      if (totalPages > 0) {
-        try {
-          const isRTL = textDirection === 'rtl'
-          // Recalculate optimal sheets per booklet for new pages per sheet
-          const optimalSheets = findOptimalSheetsPerBooklet(totalPages, newValue)
-          setSheetsPerBooklet(optimalSheets)
-          const calculatedLayout = calculateBookletLayout(totalPages, optimalSheets, newValue, isRTL)
-          setLayout(calculatedLayout)
-        } catch (err) {
-          setError(err.message)
-        }
+      const selectedPages = getRangePageCount(rangeStart, rangeEnd)
+      if (selectedPages > 0) {
+        const isRTL = textDirection === 'rtl'
+        const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, newValue)
+        setSheetsPerBooklet(optimalSheets)
+        applyRangeLayout({
+          sheetsPerBooklet: optimalSheets,
+          pagesPerSheet: newValue,
+          isRTL,
+        })
       }
     }
   }
 
   const useOptimalSheets = () => {
-    if (totalPages > 0) {
+    const selectedPages = getRangePageCount(rangeStart, rangeEnd)
+    if (selectedPages > 0) {
       const isRTL = textDirection === 'rtl'
-      const optimalSheets = findOptimalSheetsPerBooklet(totalPages, pagesPerSheet)
+      const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, pagesPerSheet)
       setSheetsPerBooklet(optimalSheets)
-      const calculatedLayout = calculateBookletLayout(totalPages, optimalSheets, pagesPerSheet, isRTL)
-      setLayout(calculatedLayout)
+      applyRangeLayout({
+        sheetsPerBooklet: optimalSheets,
+        isRTL,
+      })
     }
+  }
+
+  const handleRangeStartChange = (value) => {
+    if (totalPages <= 0) return
+    const parsed = parseInt(value, 10)
+    if (Number.isNaN(parsed)) return
+    const boundedStart = Math.min(Math.max(1, parsed), totalPages)
+    const boundedEnd = Math.min(Math.max(boundedStart, rangeEnd), totalPages)
+    setRangeStart(boundedStart)
+    setRangeEnd(boundedEnd)
+    applyRangeLayout({ rangeStart: boundedStart, rangeEnd: boundedEnd })
+  }
+
+  const handleRangeEndChange = (value) => {
+    if (totalPages <= 0) return
+    const parsed = parseInt(value, 10)
+    if (Number.isNaN(parsed)) return
+    const boundedEnd = Math.min(Math.max(rangeStart, parsed), totalPages)
+    setRangeEnd(boundedEnd)
+    applyRangeLayout({ rangeEnd: boundedEnd })
   }
 
   const generateBookletPdf = useCallback(async () => {
@@ -150,11 +213,16 @@ function App() {
       defaultSize = [width, height]
     }
 
+    const pageRangeOffset = Math.max(0, (layout.rangeStart ?? 1) - 1)
     for (const pageNum of layout.pageSequence) {
       if (pageNum === null) {
         bookletPdf.addPage(defaultSize)
-      } else if (pageNum >= 1 && pageNum <= sourcePdf.getPageCount()) {
-        const [copiedPage] = await bookletPdf.copyPages(sourcePdf, [pageNum - 1])
+        continue
+      }
+
+      const absoluteIndex = pageRangeOffset + pageNum - 1
+      if (absoluteIndex >= 0 && absoluteIndex < sourcePdf.getPageCount()) {
+        const [copiedPage] = await bookletPdf.copyPages(sourcePdf, [absoluteIndex])
         bookletPdf.addPage(copiedPage)
       } else {
         bookletPdf.addPage(defaultSize)
@@ -188,6 +256,9 @@ function App() {
       setExporting(false)
     }
   }
+
+  const selectedPageCount = getRangePageCount(rangeStart, rangeEnd)
+  const layoutRangeStart = layout?.rangeStart ?? 1
 
   return (
     <div className="app">
@@ -240,8 +311,8 @@ function App() {
                   Pages per Sheet (front + back)
                   <span className="hint">Must be multiple of 2</span>
                 </label>
-                  <div className="quick-buttons">
-                    {[4, 8, 16].map(val => (
+                <div className="quick-buttons">
+                  {[4, 8, 16].map(val => (
                     <button
                       key={val}
                       type="button"
@@ -251,6 +322,35 @@ function App() {
                       {val}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className="control-group">
+                <label>
+                  Print Range
+                  <span className="hint">Choose the start and end page for the booklet</span>
+                </label>
+                <div className="range-inputs">
+                  <input
+                    type="number"
+                    min="1"
+                    max={totalPages}
+                    value={rangeStart}
+                    onChange={(e) => handleRangeStartChange(e.target.value)}
+                    className="number-input"
+                  />
+                  <span className="range-separator">—</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max={totalPages}
+                    value={rangeEnd}
+                    onChange={(e) => handleRangeEndChange(e.target.value)}
+                    className="number-input"
+                  />
+                </div>
+                <div className="range-hint">
+                  Printing {selectedPageCount} page{selectedPageCount === 1 ? '' : 's'} from {rangeStart} to {rangeEnd}
                 </div>
               </div>
 
@@ -368,7 +468,13 @@ function App() {
                   <div className="details-grid">
                     <div className="detail-item">
                       <span className="detail-label">Total PDF Pages:</span>
-                      <span className="detail-value">{layout.totalPages}</span>
+                      <span className="detail-value">{totalPages}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Selected Range:</span>
+                      <span className="detail-value">
+                        {layout.rangeStart}–{layout.rangeEnd} ({layout.totalPages} page{layout.totalPages === 1 ? '' : 's'})
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Pages per Sheet:</span>
@@ -414,58 +520,78 @@ function App() {
                       </p>
                     </div>
                     <div className="booklets-container">
-                      {layout.booklets.map((booklet) => (
-                        <div key={booklet.index} className="booklet-card">
-                          <div className="booklet-header">
-                            <div>
-                              <div className="booklet-title">Booklet {booklet.index}</div>
-                              <div className="booklet-meta">
-                                {booklet.sheetCount} sheets · {booklet.sheetCount * layout.pagesPerSheet} pages
+                      {layout.booklets.map((booklet) => {
+                        const pagesPerBooklet = layout.pagesPerBooklet || booklet.pages || 0
+                        const relativeRangeStart = (booklet.index - 1) * pagesPerBooklet + 1
+                        const relativeRangeEnd = relativeRangeStart + pagesPerBooklet - 1
+                        const actualRelativePages = (booklet.pageOrder ?? []).filter((page) => page !== null)
+                        const absolutePageNumbers = actualRelativePages.map((page) => layoutRangeStart + page - 1)
+                        const hasActualPages = absolutePageNumbers.length > 0
+
+                        return (
+                          <div key={booklet.index} className="booklet-card">
+                            <div className="booklet-header">
+                              <div>
+                                <div className="booklet-title">Booklet {booklet.index}</div>
+                                <div className="booklet-meta">
+                                  <span>
+                                    {booklet.sheetCount} sheets · {booklet.sheetCount * layout.pagesPerSheet} pages
+                                  </span>
+                                  <span className="booklet-range">
+                                    Pages {relativeRangeStart}–{relativeRangeEnd}
+                                  </span>
+                                </div>
                               </div>
+                              {booklet.blankPages > 0 && (
+                                <span className="blank-chip">
+                                  {booklet.blankPages} blank page{booklet.blankPages === 1 ? '' : 's'}
+                                </span>
+                              )}
                             </div>
-                            {booklet.blankPages > 0 && (
-                              <span className="blank-chip">
-                                {booklet.blankPages} blank page{booklet.blankPages === 1 ? '' : 's'}
-                              </span>
-                            )}
-                          </div>
-                          <div className="sheets-container">
-                            {booklet.sheets.map((sheet, sheetIndex) => (
-                              <div key={sheetIndex} className="sheet-card">
-                                <div className="sheet-header">Sheet {sheetIndex + 1}</div>
-                                <div className="sheet-layout">
-                                  <div className="sheet-side front">
-                                    <div className="side-label">Front</div>
-                                    <div className="pages-row">
-                                      {sheet.slice(0, sheet.length / 2).map((page, idx) => (
-                                        <span
-                                          key={idx}
-                                          className={`page-number ${page === null ? 'blank' : ''}`}
-                                        >
-                                          {page === null ? '—' : page}
-                                        </span>
-                                      ))}
+                            <div className="sheets-container">
+                              {booklet.sheets.map((sheet, sheetIndex) => (
+                                <div key={sheetIndex} className="sheet-card">
+                                  <div className="sheet-header">Sheet {sheetIndex + 1}</div>
+                                  <div className="sheet-layout">
+                                    <div className="sheet-side front">
+                                      <div className="side-label">Front</div>
+                                      <div className="pages-row">
+                                        {sheet.slice(0, sheet.length / 2).map((page, idx) => {
+                                          const absolutePage = page === null ? null : layoutRangeStart + page - 1
+                                          return (
+                                            <span
+                                              key={idx}
+                                              className={`page-number ${page === null ? 'blank' : ''}`}
+                                            >
+                                              {absolutePage === null ? '—' : absolutePage}
+                                            </span>
+                                          )
+                                        })}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="sheet-side back">
-                                    <div className="side-label">Back</div>
-                                    <div className="pages-row">
-                                      {sheet.slice(sheet.length / 2).map((page, idx) => (
-                                        <span
-                                          key={idx}
-                                          className={`page-number ${page === null ? 'blank' : ''}`}
-                                        >
-                                          {page === null ? '—' : page}
-                                        </span>
-                                      ))}
+                                    <div className="sheet-side back">
+                                      <div className="side-label">Back</div>
+                                      <div className="pages-row">
+                                        {sheet.slice(sheet.length / 2).map((page, idx) => {
+                                          const absolutePage = page === null ? null : layoutRangeStart + page - 1
+                                          return (
+                                            <span
+                                              key={idx}
+                                              className={`page-number ${page === null ? 'blank' : ''}`}
+                                            >
+                                              {absolutePage === null ? '—' : absolutePage}
+                                            </span>
+                                          )
+                                        })}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 )}

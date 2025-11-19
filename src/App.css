@@ -170,6 +170,25 @@
   transition: border-color 0.3s;
 }
 
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-separator {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #444;
+}
+
+.range-hint {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #444;
+  font-weight: 600;
+}
+
 .number-input:focus {
   outline: none;
   border-color: #667eea;
@@ -469,8 +488,17 @@
 }
 
 .booklet-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   font-size: 0.9rem;
   color: #666;
+}
+
+.booklet-range {
+  font-size: 0.85rem;
+  color: #444;
+  font-weight: 600;
 }
 
 .blank-chip {
@@ -571,4 +599,3 @@
     grid-template-columns: 1fr;
   }
 }
-
