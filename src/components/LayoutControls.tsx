@@ -1,4 +1,11 @@
-function PagesPerSheetControl({ pagesPerSheet, onPagesPerSheetChange }) {
+import { type TextDirection } from '../utils/rtlDetector'
+
+interface PagesPerSheetControlProps {
+  pagesPerSheet: number
+  onPagesPerSheetChange: (value: number) => void
+}
+
+function PagesPerSheetControl({ pagesPerSheet, onPagesPerSheetChange }: PagesPerSheetControlProps) {
   return (
     <div className="control-group">
       <label>
@@ -21,6 +28,15 @@ function PagesPerSheetControl({ pagesPerSheet, onPagesPerSheetChange }) {
   )
 }
 
+interface PrintRangeControlProps {
+  rangeStart: number
+  rangeEnd: number
+  totalPages: number
+  selectedPageCount: number
+  onRangeStartChange: (value: string) => void
+  onRangeEndChange: (value: string) => void
+}
+
 function PrintRangeControl({
   rangeStart,
   rangeEnd,
@@ -28,7 +44,7 @@ function PrintRangeControl({
   selectedPageCount,
   onRangeStartChange,
   onRangeEndChange
-}) {
+}: PrintRangeControlProps) {
   return (
     <div className="control-group">
       <label>
@@ -61,12 +77,19 @@ function PrintRangeControl({
   )
 }
 
+interface TextDirectionControlProps {
+  textDirection: TextDirection
+  detectedDirection: TextDirection | null
+  detecting: boolean
+  onTextDirectionChange: (direction: TextDirection) => void
+}
+
 function TextDirectionControl({
   textDirection,
   detectedDirection,
   detecting,
   onTextDirectionChange
-}) {
+}: TextDirectionControlProps) {
   return (
     <div className="control-group">
       <label>
@@ -107,12 +130,19 @@ function TextDirectionControl({
   )
 }
 
+interface SheetsPerBookletControlProps {
+  sheetsPerBooklet: number
+  pagesPerSheet: number
+  onSheetsPerBookletChange: (value: string) => void
+  onOptimize: () => void
+}
+
 function SheetsPerBookletControl({
   sheetsPerBooklet,
   pagesPerSheet,
   onSheetsPerBookletChange,
   onOptimize
-}) {
+}: SheetsPerBookletControlProps) {
   return (
     <div className="control-group">
       <label htmlFor="sheets-per-booklet">
@@ -145,6 +175,24 @@ function SheetsPerBookletControl({
   )
 }
 
+interface LayoutControlsProps {
+  pagesPerSheet: number
+  rangeStart: number
+  rangeEnd: number
+  totalPages: number
+  selectedPageCount: number
+  textDirection: TextDirection
+  detectedDirection: TextDirection | null
+  detecting: boolean
+  sheetsPerBooklet: number
+  onPagesPerSheetChange: (value: number) => void
+  onRangeStartChange: (value: string) => void
+  onRangeEndChange: (value: string) => void
+  onTextDirectionChange: (direction: TextDirection) => void
+  onSheetsPerBookletChange: (value: string) => void
+  onOptimize: () => void
+}
+
 export default function LayoutControls({
   pagesPerSheet,
   rangeStart,
@@ -161,7 +209,7 @@ export default function LayoutControls({
   onTextDirectionChange,
   onSheetsPerBookletChange,
   onOptimize
-}) {
+}: LayoutControlsProps) {
   return (
     <div className="controls-section">
       <h2>Layout Settings</h2>

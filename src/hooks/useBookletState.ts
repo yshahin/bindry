@@ -1,27 +1,68 @@
 import { useState, useCallback } from 'react'
 import { PDFDocument } from 'pdf-lib'
-import { calculateBookletLayout, findOptimalSheetsPerBooklet } from '../utils/bookletCalculator'
-import { detectTextDirection, inferDirectionFromFilename } from '../utils/rtlDetector'
+import { calculateBookletLayout, findOptimalSheetsPerBooklet, type BookletLayout } from '../utils/bookletCalculator'
+import { detectTextDirection, inferDirectionFromFilename, type TextDirection } from '../utils/rtlDetector'
 
-const getRangePageCount = (start, end) => Math.max(0, end - start + 1)
+const getRangePageCount = (start: number, end: number): number => Math.max(0, end - start + 1)
 
-export function useBookletState() {
-  const [pdfFile, setPdfFile] = useState(null)
-  const [totalPages, setTotalPages] = useState(0)
-  const [sheetsPerBooklet, setSheetsPerBooklet] = useState(4)
-  const [pagesPerSheet, setPagesPerSheet] = useState(4)
-  const [pdfData, setPdfData] = useState(null)
-  const [textDirection, setTextDirection] = useState('ltr')
-  const [detectedDirection, setDetectedDirection] = useState(null)
-  const [layout, setLayout] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [detecting, setDetecting] = useState(false)
-  const [exporting, setExporting] = useState(false)
-  const [rangeStart, setRangeStart] = useState(1)
-  const [rangeEnd, setRangeEnd] = useState(0)
+interface ApplyRangeLayoutOptions {
+  pdfTotalPages?: number
+  rangeStart?: number
+  rangeEnd?: number
+  isRTL?: boolean
+  sheetsPerBooklet?: number
+  pagesPerSheet?: number
+}
 
-  const applyRangeLayout = useCallback((options = {}) => {
+interface EnrichedBookletLayout extends BookletLayout {
+  rangeStart: number
+  rangeEnd: number
+}
+
+export interface BookletState {
+  pdfFile: File | null
+  totalPages: number
+  sheetsPerBooklet: number
+  pagesPerSheet: number
+  pdfData: ArrayBuffer | null
+  textDirection: TextDirection
+  detectedDirection: TextDirection | null
+  layout: EnrichedBookletLayout | null
+  error: string | null
+  loading: boolean
+  detecting: boolean
+  exporting: boolean
+  rangeStart: number
+  rangeEnd: number
+  selectedPageCount: number
+  setError: (error: string | null) => void
+  setExporting: (exporting: boolean) => void
+  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>
+  handleSheetsPerBookletChange: (value: string) => void
+  handleTextDirectionChange: (direction: TextDirection) => void
+  handlePagesPerSheetChange: (value: number) => void
+  useOptimalSheets: () => void
+  handleRangeStartChange: (value: string) => void
+  handleRangeEndChange: (value: string) => void
+}
+
+export function useBookletState(): BookletState {
+  const [pdfFile, setPdfFile] = useState<File | null>(null)
+  const [totalPages, setTotalPages] = useState<number>(0)
+  const [sheetsPerBooklet, setSheetsPerBooklet] = useState<number>(4)
+  const [pagesPerSheet, setPagesPerSheet] = useState<number>(4)
+  const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null)
+  const [textDirection, setTextDirection] = useState<TextDirection>('ltr')
+  const [detectedDirection, setDetectedDirection] = useState<TextDirection | null>(null)
+  const [layout, setLayout] = useState<EnrichedBookletLayout | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [detecting, setDetecting] = useState<boolean>(false)
+  const [exporting, setExporting] = useState<boolean>(false)
+  const [rangeStart, setRangeStart] = useState<number>(1)
+  const [rangeEnd, setRangeEnd] = useState<number>(0)
+
+  const applyRangeLayout = useCallback((options: ApplyRangeLayoutOptions = {}): EnrichedBookletLayout | null => {
     const pdfCapacity = options.pdfTotalPages ?? totalPages
     if (!pdfCapacity || pdfCapacity <= 0) {
       setLayout(null)
@@ -46,7 +87,7 @@ export function useBookletState() {
 
     try {
       const calculatedLayout = calculateBookletLayout(rangeLength, sheetsValue, perSheetValue, isRTL)
-      const enrichedLayout = {
+      const enrichedLayout: EnrichedBookletLayout = {
         ...calculatedLayout,
         rangeStart: startValue,
         rangeEnd: endValue,
@@ -56,13 +97,13 @@ export function useBookletState() {
       setError(null)
       return enrichedLayout
     } catch (err) {
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'An error occurred')
       return null
     }
   }, [pagesPerSheet, rangeEnd, rangeStart, sheetsPerBooklet, textDirection, totalPages])
 
-  const handleFileUpload = useCallback(async (event) => {
-    const file = event.target.files[0]
+  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file = event.target.files?.[0]
     if (!file) return
 
     if (file.type !== 'application/pdf') {
@@ -90,7 +131,7 @@ export function useBookletState() {
       setRangeStart(defaultStart)
       setRangeEnd(defaultEnd)
 
-      let detectedDir = initialDirection || 'ltr'
+      let detectedDir: TextDirection = initialDirection || 'ltr'
       try {
         const detected = await detectTextDirection(arrayBuffer, file.name)
         setDetectedDirection(detected)
@@ -116,7 +157,7 @@ export function useBookletState() {
         })
       }
     } catch (err) {
-      setError(`Error reading PDF: ${err.message}`)
+      setError(`Error reading PDF: ${err instanceof Error ? err.message : 'Unknown error'}`)
       setPdfFile(null)
       setTotalPages(0)
       setLayout(null)
@@ -128,7 +169,7 @@ export function useBookletState() {
     }
   }, [applyRangeLayout, pagesPerSheet])
 
-  const handleSheetsPerBookletChange = useCallback((value) => {
+  const handleSheetsPerBookletChange = useCallback((value: string): void => {
     const newValue = parseInt(value) || 4
     if (newValue > 0) {
       setSheetsPerBooklet(newValue)
@@ -138,15 +179,15 @@ export function useBookletState() {
     }
   }, [applyRangeLayout, rangeEnd, rangeStart])
 
-  const handleTextDirectionChange = useCallback((direction) => {
+  const handleTextDirectionChange = useCallback((direction: TextDirection): void => {
     setTextDirection(direction)
     if (getRangePageCount(rangeStart, rangeEnd) > 0) {
       applyRangeLayout({ isRTL: direction === 'rtl' })
     }
   }, [applyRangeLayout, rangeEnd, rangeStart])
 
-  const handlePagesPerSheetChange = useCallback((value) => {
-    const newValue = parseInt(value) || 2
+  const handlePagesPerSheetChange = useCallback((value: number): void => {
+    const newValue = parseInt(String(value)) || 2
     if (newValue > 0 && newValue % 2 === 0) {
       setPagesPerSheet(newValue)
       const selectedPages = getRangePageCount(rangeStart, rangeEnd)
@@ -163,7 +204,7 @@ export function useBookletState() {
     }
   }, [applyRangeLayout, rangeEnd, rangeStart, textDirection])
 
-  const useOptimalSheets = useCallback(() => {
+  const useOptimalSheets = useCallback((): void => {
     const selectedPages = getRangePageCount(rangeStart, rangeEnd)
     if (selectedPages > 0) {
       const isRTL = textDirection === 'rtl'
@@ -176,7 +217,7 @@ export function useBookletState() {
     }
   }, [applyRangeLayout, pagesPerSheet, rangeEnd, rangeStart, textDirection])
 
-  const handleRangeStartChange = useCallback((value) => {
+  const handleRangeStartChange = useCallback((value: string): void => {
     if (totalPages <= 0) return
     const parsed = parseInt(value, 10)
     if (Number.isNaN(parsed)) return
@@ -187,7 +228,7 @@ export function useBookletState() {
     applyRangeLayout({ rangeStart: boundedStart, rangeEnd: boundedEnd })
   }, [applyRangeLayout, rangeEnd, totalPages])
 
-  const handleRangeEndChange = useCallback((value) => {
+  const handleRangeEndChange = useCallback((value: string): void => {
     if (totalPages <= 0) return
     const parsed = parseInt(value, 10)
     if (Number.isNaN(parsed)) return

@@ -1,4 +1,11 @@
-function ResultsSummary({ layout, onPrint, exporting }) {
+import { type BookletLayout } from '../utils/bookletCalculator'
+
+interface ResultsSummaryProps {
+  onPrint: () => void
+  exporting: boolean
+}
+
+function ResultsSummary({ onPrint, exporting }: ResultsSummaryProps) {
   return (
     <div className="results-header">
       <h2>Layout Results</h2>
@@ -15,7 +22,11 @@ function ResultsSummary({ layout, onPrint, exporting }) {
   )
 }
 
-function ResultsGrid({ layout }) {
+interface ResultsGridProps {
+  layout: BookletLayout
+}
+
+function ResultsGrid({ layout }: ResultsGridProps) {
   return (
     <div className="results-grid">
       <div className="result-card primary">
@@ -46,7 +57,12 @@ function ResultsGrid({ layout }) {
   )
 }
 
-function DetailsBreakdown({ layout, totalPages }) {
+interface DetailsBreakdownProps {
+  layout: BookletLayout
+  totalPages: number
+}
+
+function DetailsBreakdown({ layout, totalPages }: DetailsBreakdownProps) {
   return (
     <div className="details-section">
       <h3>Detailed Breakdown</h3>
@@ -96,10 +112,17 @@ function DetailsBreakdown({ layout, totalPages }) {
   )
 }
 
-export default function ResultsDisplay({ layout, totalPages, onPrint, exporting }) {
+interface ResultsDisplayProps {
+  layout: BookletLayout
+  totalPages: number
+  onPrint: () => void
+  exporting: boolean
+}
+
+export default function ResultsDisplay({ layout, totalPages, onPrint, exporting }: ResultsDisplayProps) {
   return (
     <div className="results-section">
-      <ResultsSummary layout={layout} onPrint={onPrint} exporting={exporting} />
+      <ResultsSummary onPrint={onPrint} exporting={exporting} />
       <ResultsGrid layout={layout} />
       <DetailsBreakdown layout={layout} totalPages={totalPages} />
     </div>

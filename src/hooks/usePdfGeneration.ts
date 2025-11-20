@@ -1,23 +1,24 @@
 import { useCallback } from 'react'
 import { PDFDocument } from 'pdf-lib'
+import type { BookletLayout } from '../utils/bookletCalculator'
 
-export function useBookletPdfGenerator(pdfData, layout) {
+export function useBookletPdfGenerator(pdfData: ArrayBuffer | null, layout: BookletLayout | null) {
   return useCallback(async () => {
-    if (!pdfData || !layout || !layout.pageSequence?.length) {
+    if (!pdfData || !layout || !layout.sequence?.length) {
       throw new Error('A PDF with a generated layout is required.')
     }
 
     const sourcePdf = await PDFDocument.load(pdfData)
     const bookletPdf = await PDFDocument.create()
 
-    let defaultSize = [612, 792]
+    let defaultSize: [number, number] = [612, 792]
     if (sourcePdf.getPageCount() > 0) {
       const { width, height } = sourcePdf.getPage(0).getSize()
       defaultSize = [width, height]
     }
 
     const pageRangeOffset = Math.max(0, (layout.rangeStart ?? 1) - 1)
-    for (const pageNum of layout.pageSequence) {
+    for (const pageNum of layout.sequence) {
       if (pageNum === null) {
         bookletPdf.addPage(defaultSize)
         continue
@@ -36,8 +37,8 @@ export function useBookletPdfGenerator(pdfData, layout) {
   }, [layout, pdfData])
 }
 
-export function downloadPdfBlob(pdfBytes, filename) {
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+export function downloadPdfBlob(pdfBytes: Uint8Array, filename: string): void {
+  const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

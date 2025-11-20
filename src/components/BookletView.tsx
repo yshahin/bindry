@@ -1,4 +1,12 @@
-function SheetCard({ sheet, sheetIndex, layoutRangeStart }) {
+import { type BookletLayout, type Booklet, type PageNumber } from '../utils/bookletCalculator'
+
+interface SheetCardProps {
+  sheet: PageNumber[]
+  sheetIndex: number
+  layoutRangeStart: number
+}
+
+function SheetCard({ sheet, sheetIndex, layoutRangeStart }: SheetCardProps) {
   return (
     <div className="sheet-card">
       <div className="sheet-header">Sheet {sheetIndex + 1}</div>
@@ -40,7 +48,13 @@ function SheetCard({ sheet, sheetIndex, layoutRangeStart }) {
   )
 }
 
-function BookletCard({ booklet, layout, layoutRangeStart }) {
+interface BookletCardProps {
+  booklet: Booklet
+  layout: BookletLayout
+  layoutRangeStart: number
+}
+
+function BookletCard({ booklet, layout, layoutRangeStart }: BookletCardProps) {
   const pagesPerBooklet = layout.pagesPerBooklet || booklet.pages || 0
   const relativeRangeStart = (booklet.index - 1) * pagesPerBooklet + 1
   const relativeRangeEnd = relativeRangeStart + pagesPerBooklet - 1
@@ -79,7 +93,12 @@ function BookletCard({ booklet, layout, layoutRangeStart }) {
   )
 }
 
-export default function BookletView({ layout, layoutRangeStart }) {
+interface BookletViewProps {
+  layout: BookletLayout | null
+  layoutRangeStart: number
+}
+
+export default function BookletView({ layout, layoutRangeStart }: BookletViewProps) {
   if (!layout?.booklets || layout.booklets.length === 0) {
     return null
   }

@@ -1,4 +1,11 @@
-export default function FileUpload({ pdfFile, totalPages, loading, onFileUpload }) {
+interface FileUploadProps {
+  pdfFile: File | null
+  totalPages: number
+  loading: boolean
+  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function FileUpload({ pdfFile, totalPages, loading, onFileUpload }: FileUploadProps) {
   return (
     <div className="upload-section">
       <div className="upload-area">

@@ -49,7 +49,7 @@ function App() {
       downloadPdfBlob(pdfBytes, `${baseName}-booklet.pdf`)
     } catch (err) {
       console.error(err)
-      setError(`Unable to generate booklet PDF: ${err.message}`)
+      setError(`Unable to generate booklet PDF: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setExporting(false)
     }
