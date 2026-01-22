@@ -12,6 +12,8 @@ interface ApplyRangeLayoutOptions {
   isRTL?: boolean
   sheetsPerBooklet?: number
   pagesPerSheet?: number
+  hasCover?: boolean
+  coverPages?: number
 }
 
 interface EnrichedBookletLayout extends BookletLayout {
@@ -35,6 +37,8 @@ export interface BookletState {
   rangeStart: number
   rangeEnd: number
   selectedPageCount: number
+  hasCover: boolean
+  coverPages: number
   setError: (error: string | null) => void
   setExporting: (exporting: boolean) => void
   handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>
@@ -45,6 +49,8 @@ export interface BookletState {
   handleRangeStartChange: (value: string) => void
   handleRangeEndChange: (value: string) => void
   handleResetRange: () => void
+  handleHasCoverChange: (value: boolean) => void
+  handleCoverPagesChange: (value: number) => void
 }
 
 export function useBookletState(): BookletState {
@@ -62,6 +68,8 @@ export function useBookletState(): BookletState {
   const [exporting, setExporting] = useState<boolean>(false)
   const [rangeStart, setRangeStart] = useState<number>(1)
   const [rangeEnd, setRangeEnd] = useState<number>(0)
+  const [hasCover, setHasCover] = useState<boolean>(true)
+  const [coverPages, setCoverPages] = useState<number>(2)
 
   const applyRangeLayout = useCallback((options: ApplyRangeLayoutOptions = {}): EnrichedBookletLayout | null => {
     const pdfCapacity = options.pdfTotalPages ?? totalPages
@@ -85,9 +93,11 @@ export function useBookletState(): BookletState {
     const isRTL = options.isRTL ?? textDirection === 'rtl'
     const sheetsValue = options.sheetsPerBooklet ?? sheetsPerBooklet
     const perSheetValue = options.pagesPerSheet ?? pagesPerSheet
+    const coverEnabled = options.hasCover ?? hasCover
+    const coverPagesValue = options.coverPages ?? coverPages
 
     try {
-      const calculatedLayout = calculateBookletLayout(rangeLength, sheetsValue, perSheetValue, isRTL)
+      const calculatedLayout = calculateBookletLayout(rangeLength, sheetsValue, perSheetValue, isRTL, coverEnabled, coverPagesValue)
       const enrichedLayout: EnrichedBookletLayout = {
         ...calculatedLayout,
         rangeStart: startValue,
@@ -101,7 +111,7 @@ export function useBookletState(): BookletState {
       setError(err instanceof Error ? err.message : 'An error occurred')
       return null
     }
-  }, [pagesPerSheet, rangeEnd, rangeStart, sheetsPerBooklet, textDirection, totalPages])
+  }, [pagesPerSheet, rangeEnd, rangeStart, sheetsPerBooklet, textDirection, totalPages, hasCover, coverPages])
 
   const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
@@ -147,7 +157,7 @@ export function useBookletState(): BookletState {
 
       if (pages > 0) {
         const isRTL = detectedDir === 'rtl'
-        const optimalSheets = findOptimalSheetsPerBooklet(pages, pagesPerSheet)
+        const optimalSheets = findOptimalSheetsPerBooklet(pages, pagesPerSheet, hasCover, coverPages)
         setSheetsPerBooklet(optimalSheets)
         applyRangeLayout({
           rangeStart: defaultStart,
@@ -194,7 +204,7 @@ export function useBookletState(): BookletState {
       const selectedPages = getRangePageCount(rangeStart, rangeEnd)
       if (selectedPages > 0) {
         const isRTL = textDirection === 'rtl'
-        const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, newValue)
+        const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, newValue, hasCover, coverPages)
         setSheetsPerBooklet(optimalSheets)
         applyRangeLayout({
           sheetsPerBooklet: optimalSheets,
@@ -203,20 +213,20 @@ export function useBookletState(): BookletState {
         })
       }
     }
-  }, [applyRangeLayout, rangeEnd, rangeStart, textDirection])
+  }, [applyRangeLayout, rangeEnd, rangeStart, textDirection, hasCover, coverPages])
 
   const useOptimalSheets = useCallback((): void => {
     const selectedPages = getRangePageCount(rangeStart, rangeEnd)
     if (selectedPages > 0) {
       const isRTL = textDirection === 'rtl'
-      const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, pagesPerSheet)
+      const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, pagesPerSheet, hasCover, coverPages)
       setSheetsPerBooklet(optimalSheets)
       applyRangeLayout({
         sheetsPerBooklet: optimalSheets,
         isRTL,
       })
     }
-  }, [applyRangeLayout, pagesPerSheet, rangeEnd, rangeStart, textDirection])
+  }, [applyRangeLayout, pagesPerSheet, rangeEnd, rangeStart, textDirection, hasCover, coverPages])
 
   const handleRangeStartChange = useCallback((value: string): void => {
     if (totalPages <= 0) return
@@ -245,6 +255,29 @@ export function useBookletState(): BookletState {
     applyRangeLayout({ rangeStart: 1, rangeEnd: totalPages })
   }, [applyRangeLayout, totalPages])
 
+  const handleHasCoverChange = useCallback((value: boolean): void => {
+    setHasCover(value)
+    if (getRangePageCount(rangeStart, rangeEnd) > 0) {
+      const selectedPages = getRangePageCount(rangeStart, rangeEnd)
+      const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, pagesPerSheet, value, coverPages)
+      setSheetsPerBooklet(optimalSheets)
+      applyRangeLayout({ hasCover: value, sheetsPerBooklet: optimalSheets })
+    }
+  }, [applyRangeLayout, rangeEnd, rangeStart, pagesPerSheet, coverPages])
+
+  const handleCoverPagesChange = useCallback((value: number): void => {
+    const newValue = parseInt(String(value)) || 2
+    if (newValue > 0 && newValue <= 10) {
+      setCoverPages(newValue)
+      if (getRangePageCount(rangeStart, rangeEnd) > 0) {
+        const selectedPages = getRangePageCount(rangeStart, rangeEnd)
+        const optimalSheets = findOptimalSheetsPerBooklet(selectedPages, pagesPerSheet, hasCover, newValue)
+        setSheetsPerBooklet(optimalSheets)
+        applyRangeLayout({ coverPages: newValue, sheetsPerBooklet: optimalSheets })
+      }
+    }
+  }, [applyRangeLayout, rangeEnd, rangeStart, pagesPerSheet, hasCover])
+
   return {
     // State
     pdfFile,
@@ -262,6 +295,8 @@ export function useBookletState(): BookletState {
     rangeStart,
     rangeEnd,
     selectedPageCount: getRangePageCount(rangeStart, rangeEnd),
+    hasCover,
+    coverPages,
     // Setters
     setError,
     setExporting,
@@ -274,5 +309,7 @@ export function useBookletState(): BookletState {
     handleRangeStartChange,
     handleRangeEndChange,
     handleResetRange,
+    handleHasCoverChange,
+    handleCoverPagesChange,
   }
 }

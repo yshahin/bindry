@@ -30,6 +30,8 @@ export interface BookletLayout extends BookletStructure {
   efficiency: number
   rangeStart?: number
   rangeEnd?: number
+  hasCover?: boolean
+  coverPages?: number
 }
 
 interface ImposedPages {
@@ -81,18 +83,38 @@ export function generateBookletStructure(
   totalPages: number,
   sheetsPerBooklet: number,
   pagesPerSheet: number,
-  isRTL: boolean = false
+  isRTL: boolean = false,
+  hasCover: boolean = false,
+  coverPages: number = 2
 ): BookletStructure {
   const pagesPerBooklet = sheetsPerBooklet * pagesPerSheet
 
-  const totalPhysicalPagesNeeded = Math.ceil(totalPages / pagesPerSheet) * pagesPerSheet
+  // Add cover pages if needed (at beginning and end)
+  const totalCoverPages = hasCover ? coverPages * 2 : 0
+  const totalPagesWithCovers = totalPages + totalCoverPages
+
+  const totalPhysicalPagesNeeded = Math.ceil(totalPagesWithCovers / pagesPerSheet) * pagesPerSheet
   const totalBooklets = Math.ceil(totalPhysicalPagesNeeded / pagesPerBooklet) || 1
   const totalPhysicalPages = totalBooklets * pagesPerBooklet
-  const totalBlankPages = Math.max(0, totalPhysicalPages - totalPages)
+  const totalBlankPages = Math.max(0, totalPhysicalPages - totalPagesWithCovers)
   const totalSheets = totalPhysicalPages / pagesPerSheet
 
   const pagesWithBlanks: PageNumber[] = []
+
+  // Add cover blank pages at the beginning
+  if (hasCover) {
+    for (let i = 0; i < coverPages; i++) pagesWithBlanks.push(null)
+  }
+
+  // Add actual pages
   for (let i = 1; i <= totalPages; i++) pagesWithBlanks.push(i)
+
+  // Add cover blank pages at the end
+  if (hasCover) {
+    for (let i = 0; i < coverPages; i++) pagesWithBlanks.push(null)
+  }
+
+  // Add remaining blank pages to fill last booklet
   for (let i = 0; i < totalBlankPages; i++) pagesWithBlanks.push(null)
 
   const booklets: Booklet[] = []
@@ -133,7 +155,9 @@ export function calculateBookletLayout(
   totalPages: number,
   sheetsPerBooklet: number,
   pagesPerSheet: number,
-  isRTL: boolean = false
+  isRTL: boolean = false,
+  hasCover: boolean = false,
+  coverPages: number = 2
 ): BookletLayout {
   if (pagesPerSheet % 2 !== 0) {
     throw new Error('Pages per sheet must be a multiple of 2')
@@ -150,7 +174,7 @@ export function calculateBookletLayout(
     totalSheets,
     pagesPerBooklet,
     sequence,
-  } = generateBookletStructure(totalPages, sheetsPerBooklet, pagesPerSheet, isRTL)
+  } = generateBookletStructure(totalPages, sheetsPerBooklet, pagesPerSheet, isRTL, hasCover, coverPages)
 
   const completeBooklets = Math.floor(totalPages / pagesPerBooklet)
   const remainingPages = totalPages % pagesPerBooklet
@@ -171,14 +195,24 @@ export function calculateBookletLayout(
     efficiency: parseFloat(efficiency),
     booklets,
     sequence,
+    hasCover,
+    coverPages,
   }
 }
 
-export function findOptimalSheetsPerBooklet(totalPages: number, pagesPerSheet: number): number {
-  if (totalPages <= 0) return 4
+export function findOptimalSheetsPerBooklet(
+  totalPages: number,
+  pagesPerSheet: number,
+  hasCover: boolean = false,
+  coverPages: number = 2
+): number {
+  // Include cover pages in total count for optimization
+  const totalWithCover = hasCover ? totalPages + (coverPages * 2) : totalPages
+
+  if (totalWithCover <= 0) return 4
 
   const preferredSheetCounts = [3, 4, 5, 6, 7, 8]
-  const maxPossibleSheets = Math.ceil(totalPages / pagesPerSheet)
+  const maxPossibleSheets = Math.ceil(totalWithCover / pagesPerSheet)
   let candidates = preferredSheetCounts.filter((count) => count <= maxPossibleSheets)
 
   if (!candidates.length) {
@@ -190,7 +224,7 @@ export function findOptimalSheetsPerBooklet(totalPages: number, pagesPerSheet: n
   let minBlankPages = Infinity
 
   candidates.forEach((sheets) => {
-    const layout = calculateBookletLayout(totalPages, sheets, pagesPerSheet)
+    const layout = calculateBookletLayout(totalPages, sheets, pagesPerSheet, false, hasCover, coverPages)
     if (
       layout.totalBlankPages < minBlankPages ||
       (layout.totalBlankPages === minBlankPages && sheets > bestSheets)

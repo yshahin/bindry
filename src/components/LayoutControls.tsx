@@ -186,6 +186,55 @@ function SheetsPerBookletControl({
   )
 }
 
+interface BookCoverControlProps {
+  hasCover: boolean
+  coverPages: number
+  onHasCoverChange: (value: boolean) => void
+  onCoverPagesChange: (value: number) => void
+}
+
+function BookCoverControl({
+  hasCover,
+  coverPages,
+  onHasCoverChange,
+  onCoverPagesChange
+}: BookCoverControlProps) {
+  return (
+    <div className="control-group">
+      <label>
+        Book Cover
+        <span className="hint">Add blank pages at beginning and end for gluing the cover</span>
+      </label>
+      <div className="input-group">
+        <input
+          type="number"
+          id="cover-pages"
+          min="1"
+          max="10"
+          step="1"
+          value={coverPages}
+          onChange={(e) => onCoverPagesChange(Number(e.target.value))}
+          className="number-input"
+          disabled={!hasCover}
+        />
+        <button
+          type="button"
+          onClick={() => onHasCoverChange(!hasCover)}
+          className={hasCover ? 'optimize-button active' : 'optimize-button'}
+          title={hasCover ? 'Remove cover pages' : 'Add cover pages'}
+        >
+          📕 Book Cover
+        </button>
+      </div>
+      {hasCover && (
+        <div className="computed-hint">
+          Total: {coverPages * 2} blank pages ({coverPages} at start, {coverPages} at end)
+        </div>
+      )}
+    </div>
+  )
+}
+
 interface LayoutControlsProps {
   pagesPerSheet: number
   rangeStart: number
@@ -196,6 +245,8 @@ interface LayoutControlsProps {
   detectedDirection: TextDirection | null
   detecting: boolean
   sheetsPerBooklet: number
+  hasCover: boolean
+  coverPages: number
   onPagesPerSheetChange: (value: number) => void
   onRangeStartChange: (value: string) => void
   onRangeEndChange: (value: string) => void
@@ -203,6 +254,8 @@ interface LayoutControlsProps {
   onTextDirectionChange: (direction: TextDirection) => void
   onSheetsPerBookletChange: (value: string) => void
   onOptimize: () => void
+  onHasCoverChange: (value: boolean) => void
+  onCoverPagesChange: (value: number) => void
 }
 
 export default function LayoutControls({
@@ -215,13 +268,17 @@ export default function LayoutControls({
   detectedDirection,
   detecting,
   sheetsPerBooklet,
+  hasCover,
+  coverPages,
   onPagesPerSheetChange,
   onRangeStartChange,
   onRangeEndChange,
   onResetRange,
   onTextDirectionChange,
   onSheetsPerBookletChange,
-  onOptimize
+  onOptimize,
+  onHasCoverChange,
+  onCoverPagesChange
 }: LayoutControlsProps) {
   return (
     <div className="controls-section">
@@ -230,6 +287,13 @@ export default function LayoutControls({
       <PagesPerSheetControl
         pagesPerSheet={pagesPerSheet}
         onPagesPerSheetChange={onPagesPerSheetChange}
+      />
+
+      <BookCoverControl
+        hasCover={hasCover}
+        coverPages={coverPages}
+        onHasCoverChange={onHasCoverChange}
+        onCoverPagesChange={onCoverPagesChange}
       />
 
       <PrintRangeControl

@@ -23,6 +23,8 @@ function App() {
     rangeStart,
     rangeEnd,
     selectedPageCount,
+    hasCover,
+    coverPages,
     setError,
     setExporting,
     handleFileUpload,
@@ -33,6 +35,8 @@ function App() {
     handleRangeStartChange,
     handleRangeEndChange,
     handleResetRange,
+    handleHasCoverChange,
+    handleCoverPagesChange,
   } = useBookletState()
 
   const generateBookletPdf = useBookletPdfGenerator(pdfData, layout)
@@ -87,6 +91,8 @@ function App() {
               detectedDirection={detectedDirection}
               detecting={detecting}
               sheetsPerBooklet={sheetsPerBooklet}
+              hasCover={hasCover}
+              coverPages={coverPages}
               onPagesPerSheetChange={handlePagesPerSheetChange}
               onRangeStartChange={handleRangeStartChange}
               onRangeEndChange={handleRangeEndChange}
@@ -94,6 +100,8 @@ function App() {
               onTextDirectionChange={handleTextDirectionChange}
               onSheetsPerBookletChange={handleSheetsPerBookletChange}
               onOptimize={useOptimalSheets}
+              onHasCoverChange={handleHasCoverChange}
+              onCoverPagesChange={handleCoverPagesChange}
             />
 
             {layout && (
