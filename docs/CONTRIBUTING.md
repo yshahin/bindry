@@ -318,11 +318,10 @@ const pagesToCheck = Math.min(5, pdf.numPages)  // Changed from 3
 
 **Colors**:
 ```css
-/* In App.css */
-:root {
-  --primary-color: #2563eb;  /* Change main color */
-  --success-color: #10b981;
-  --error-color: #ef4444;
+/* In src/index.css */
+@theme {
+  --color-warm-paper: #f9f5f1;
+  --color-ink-black: #2b2b2b;
 }
 ```
 

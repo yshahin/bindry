@@ -29,12 +29,19 @@ When printing books professionally, pages are printed on large sheets, folded, a
 ```
 booklets/
 ├── src/
-│   ├── App.tsx                          # Main app component
-│   ├── App.css                          # Main styles
+│   ├── App.tsx                          # App Routing & Layout
 │   ├── main.tsx                         # Entry point
+│   ├── index.css                        # Global styles & Tailwind Config
+│   ├── pages/
+│   │   ├── Home.tsx                    # Landing Page
+│   │   ├── BookletTool.tsx             # Main Tool Page
+│   │   ├── Articles.tsx                # Articles/Tutorials List
+│   │   ├── Tutorials.tsx               # Video Tutorials Page
+│   │   └── Gallery.tsx                 # Project Gallery
 │   ├── components/
+│   │   ├── Layout.tsx                  # Common Nav & Footer Layout
 │   │   ├── FileUpload.tsx              # PDF upload component
-│   │   ├── LayoutControls.tsx          # Settings controls (pages per sheet, range, etc.)
+│   │   ├── LayoutControls.tsx          # Settings controls
 │   │   ├── ResultsDisplay.tsx          # Shows calculation results
 │   │   └── BookletView.tsx             # Visualizes booklet/sheet layout
 │   ├── hooks/

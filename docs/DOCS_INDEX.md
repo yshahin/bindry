@@ -23,6 +23,7 @@ Welcome! This index helps you find the right documentation for your needs.
 | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Need fast lookup of concepts/locations | 10 min |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Want to understand system design | 15 min |
 | [AGENT_DOCS.md](AGENT_DOCS.md) | Deep dive into implementation | 30 min |
+| [BOOKBINDING_TOPICS.md](BOOKBINDING_TOPICS.md) | Domain knowledge and content ideas | 10 min |
 
 ### For Making Changes
 
