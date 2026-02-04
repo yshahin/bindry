@@ -15,7 +15,7 @@ vi.mock('./hooks/usePdfGeneration', () => ({
 }))
 
 describe('App', () => {
-    
+
   it('renders upload screen initially', () => {
     // Setup initial mock state
     vi.mocked(useBookletStateModule.useBookletState).mockReturnValue({
@@ -56,7 +56,7 @@ describe('App', () => {
   })
 
   it('renders layout controls and results when layout is present', () => {
-     vi.mocked(useBookletStateModule.useBookletState).mockReturnValue({
+    vi.mocked(useBookletStateModule.useBookletState).mockReturnValue({
       pdfFile: new File([''], 'test.pdf'),
       totalPages: 10,
       layout: {
@@ -104,20 +104,20 @@ describe('App', () => {
       handleHasCoverChange: vi.fn(),
       handleCoverPagesChange: vi.fn(),
     })
-    
+
     render(<App />)
-    
+
     // Check for some control elements
     expect(screen.getByText(/Layout Settings/i)).toBeDefined()
     expect(screen.getAllByText(/Sheets per Booklet/i).length).toBeGreaterThan(0)
-    
+
     // Check for results
     expect(screen.getByText(/Layout Results/i)).toBeDefined()
   })
 
   it('displays error message when error state is present', () => {
     const errorMsg = 'Failed to load PDF'
-     vi.mocked(useBookletStateModule.useBookletState).mockReturnValue({
+    vi.mocked(useBookletStateModule.useBookletState).mockReturnValue({
       pdfFile: null,
       totalPages: 0,
       layout: null,

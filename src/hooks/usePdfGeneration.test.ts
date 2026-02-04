@@ -71,27 +71,27 @@ describe('useBookletPdfGenerator', () => {
     mockCopyPages.mockResolvedValueOnce(copiedPages)
 
     const { result } = renderHook(() => useBookletPdfGenerator(mockPdfData, mockLayout))
-    
+
     const pdfBytes = await result.current()
 
     expect(PDFDocument.load).toHaveBeenCalledWith(mockPdfData)
     expect(PDFDocument.create).toHaveBeenCalled()
-    
+
     // Check optimization: copyPages called once with all valid indices
     // 1 -> index 0
     // 2 -> index 1
     expect(mockCopyPages).toHaveBeenCalledWith(mockSourcePdf, [0, 1])
-    
+
     // Check addPage calls
     // It should add pages in sequence order
     expect(mockAddPage).toHaveBeenCalledTimes(3)
-    
+
     // 1st page: copiedPages[0]
     expect(mockAddPage).toHaveBeenNthCalledWith(1, 'page1_copy')
-    
+
     // 2nd page: blank (default size)
     expect(mockAddPage).toHaveBeenNthCalledWith(2, [612, 792])
-    
+
     // 3rd page: copiedPages[1]
     expect(mockAddPage).toHaveBeenNthCalledWith(3, 'page2_copy')
 
@@ -102,8 +102,8 @@ describe('useBookletPdfGenerator', () => {
     const mockPdfData = new ArrayBuffer(10)
     // Range starts at 5. So layout sequence 1 refers to actual page 5 (index 4)
     const mockLayout: BookletLayout = {
-      sequence: [1, 2], 
-      rangeStart: 5, 
+      sequence: [1, 2],
+      rangeStart: 5,
       rangeEnd: 10,
       totalPages: 10,
       pagesPerSheet: 4,
@@ -119,13 +119,13 @@ describe('useBookletPdfGenerator', () => {
       pagesPerBooklet: 0,
       booklets: []
     }
-    
+
     mockCopyPages.mockResolvedValueOnce(['p5_copy', 'p6_copy'])
 
     const { result } = renderHook(() => useBookletPdfGenerator(mockPdfData, mockLayout))
     await result.current()
 
-    // Expected indices: 
+    // Expected indices:
     // 1 -> 5 (start offset 4 + 1 - 1 = 4)
     // 2 -> 6 (start offset 4 + 2 - 1 = 5)
     expect(mockCopyPages).toHaveBeenCalledWith(mockSourcePdf, [4, 5])

@@ -37,15 +37,15 @@ export type Action =
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_EXPORTING'; payload: boolean }
   | { type: 'START_FILE_LOAD' }
-  | { 
-      type: 'FILE_LOADED'; 
-      payload: { 
-        file: File; 
-        data: ArrayBuffer; 
-        totalPages: number; 
-        initialDirection: TextDirection 
-      } 
+  | {
+    type: 'FILE_LOADED';
+    payload: {
+      file: File;
+      data: ArrayBuffer;
+      totalPages: number;
+      initialDirection: TextDirection
     }
+  }
   | { type: 'FILE_LOAD_ERROR'; payload: string }
   | { type: 'SET_DETECTED_DIRECTION'; payload: { detected: TextDirection | null, final: TextDirection } }
   | { type: 'UPDATE_PARAM'; payload: Partial<State> }

@@ -25,7 +25,7 @@ describe('inferDirectionFromFilename', () => {
     expect(inferDirectionFromFilename('math_notes.pdf')).toBe('ltr')
     expect(inferDirectionFromFilename('123456.pdf')).toBe('ltr')
   })
-  
+
   it('should be case insensitive', () => {
     expect(inferDirectionFromFilename('ARABIC_BOOK.pdf')).toBe('rtl')
   })
