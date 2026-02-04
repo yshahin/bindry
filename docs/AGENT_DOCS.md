@@ -1,4 +1,4 @@
-# Agent Documentation: Booklet Layout Optimizer
+# Agent Documentation: Bindry
 
 ## Project Overview
 
@@ -479,4 +479,4 @@ When a user requests changes, ask:
 
 ---
 
-This documentation should provide everything needed to understand, maintain, and extend the Booklet Layout Optimizer application.
+This documentation should provide everything needed to understand, maintain, and extend the Bindry application.

@@ -1,6 +1,6 @@
 # Contribution Guide
 
-This guide explains how to make common modifications to the Booklet Layout Optimizer app.
+This guide explains how to make common modifications to the Bindry app.
 
 ---
 
@@ -194,7 +194,7 @@ export function useBookletPdfGenerator(...) {
 
     // Add metadata
     bookletPdf.setTitle('Booklet Layout')
-    bookletPdf.setAuthor('Booklet Layout Optimizer')
+    bookletPdf.setAuthor('Bindry')
     bookletPdf.setSubject('Print-ready booklet')
     bookletPdf.setCreator('https://your-site.com')
     bookletPdf.setProducer('pdf-lib')
