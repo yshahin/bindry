@@ -3,7 +3,7 @@ title: "Beginner's Guide to Case Binding"
 excerpt: "Learn to create a professional hardbound book by understanding the relationship between the cover case and text block."
 category: "Tutorial"
 date: "Feb 10, 2026"
-image: "/images/20260210-beginner-guide-case-binding.png"
+image: "/images/covers/20260210-beginner-guide-case-binding.png"
 ---
 
 Case binding is the standard method for creating hardcover books. Unlike other binding methods where the cover attaches directly to the pages, case binding creates the cover (the "case") separately from the text block, then joins them together. This separation is the key to understanding how hardcover books work.
@@ -52,7 +52,7 @@ Accurate measurement is critical. You need three dimensions:
 - **Width:** Text block width plus 3mm (for the square—the overhang at the fore edge)
 - **Spine width:** Measured with calipers while the text block is pressed
 
-![Case dimensions showing squares and overhang measurements](/images/case-binding-dimensions.png)
+![Case dimensions showing squares and overhang measurements](/images/diagrams/case-binding-dimensions.png)
 
 ### Step 3: Cut the Boards
 

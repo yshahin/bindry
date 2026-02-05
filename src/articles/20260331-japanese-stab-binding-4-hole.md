@@ -3,7 +3,7 @@ title: "Japanese Stab Binding: 4-Hole (Yotsume Toji)"
 excerpt: "Learn the classic Japanese side-sewn binding technique. Create beautiful books with decorative exposed stitching."
 category: "Tutorial"
 date: "Mar 31, 2026"
-image: "/images/20260331-japanese-stab-binding-4-hole.png"
+image: "/images/covers/20260331-japanese-stab-binding-4-hole.png"
 ---
 
 Japanese stab binding (Stab binding or Stabstitch) refers to a family of side-sewn bindings where thread passes through holes along the spine edge. The 4-hole pattern, called **Yotsume Toji** (四つ目綴じ), is the foundation of all Japanese stab bindings and the perfect starting point.
@@ -97,7 +97,7 @@ Cut thread approximately **4 times the spine length**:
 
 The Yotsume Toji pattern wraps thread around the spine and through each hole systematically.
 
-![4-Hole Stitch Pattern](/images/japanese-stab-4hole.svg)
+![4-Hole Stitch Pattern](/images/diagrams/japanese-stab-4hole.svg)
 
 **Starting position:** Begin at Hole 1, entering from the back
 

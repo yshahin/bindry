@@ -3,7 +3,7 @@ title: "Project: Pamphlet Stitch Booklet"
 excerpt: "Your first complete binding project. Create a simple single-signature notebook with a soft cover in under an hour."
 category: "Beginner"
 date: "Mar 17, 2026"
-image: "/images/20260317-pamphlet-stitch-booklet.png"
+image: "/images/covers/20260317-pamphlet-stitch-booklet.png"
 ---
 
 The pamphlet stitch is the simplest form of bookbinding. With just paper, thread, and a needle, you can create a functional notebook. This project teaches fundamental skills that apply to every binding method.
@@ -38,7 +38,7 @@ Take your four sheets of text paper:
 
 You now have 16 pages (4 sheets × 2 sides × 2 leaves per fold = 16 pages).
 
-![Signature Page Sequence](/images/pamphlet-imposition.svg)
+![Signature Page Sequence](/images/diagrams/pamphlet-imposition.svg)
 
 ### Step 2: Prepare the Cover
 
@@ -114,7 +114,7 @@ This is a three-hole stitch. Work from inside the signature:
 7. Make sure the thread wraps around the long stitch connecting head to tail holes
 8. Tie a square knot with the two thread ends
 
-![Pamphlet Stitch Pattern](/images/pamphlet-stitch-pattern.svg)
+![Pamphlet Stitch Pattern](/images/diagrams/pamphlet-stitch-pattern.svg)
 
 ### Step 7: Trim and Finish
 

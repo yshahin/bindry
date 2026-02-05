@@ -3,7 +3,7 @@ title: "The Anatomy of a Book"
 excerpt: "A complete visual guide to book structure: signatures, joints, squares, and every part in between."
 category: "Fundamentals"
 date: "Feb 24, 2026"
-image: "/images/20260224-anatomy-of-a-book.png"
+image: "/images/covers/20260224-anatomy-of-a-book.png"
 ---
 
 Before you can make a book, you need to understand how books are built. This guide covers every structural element from the inside out, giving you the vocabulary and understanding to tackle any binding project.
@@ -20,7 +20,7 @@ A signature is a group of nested sheets folded together. Most books are made of 
 - **8-page (quarto):** One sheet folded twice
 - **16-page (octavo):** One sheet folded three times
 
-![Signature Folding](/images/signature-folding.svg)
+![Signature Folding](/images/diagrams/signature-folding.svg)
 
 #### Head, Tail, and Fore Edge
 

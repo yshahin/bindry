@@ -3,7 +3,7 @@ title: "Paper Sizes & Formats"
 excerpt: "Understanding standard paper sizes and how they relate to book formats."
 category: "Reference"
 date: "Feb 10, 2026"
-image: "/images/20260210-paper-sizes.png"
+image: "/images/covers/20260210-paper-sizes.png"
 published: false
 ---
 

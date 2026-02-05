@@ -3,10 +3,10 @@ title: "How to Use the Booklet Imposition Tool"
 excerpt: "A step-by-step guide to transforming your digital PDFs into print-ready signatures for bookbinding."
 category: "Guide"
 date: "Feb 05, 2026"
-image: "/images/20260205-how-to-use-booklet-tool.png"
+image: "/images/covers/20260205-how-to-use-booklet-tool.png"
 ---
 
-Turning a regular PDF into a physical book requires a process called **Imposition**. This rearranges pages so that when they are printed on flat sheets and folded, they appear in the correct numerical order.
+Turning a regular PDF into a physical book requires a process called **Imposition**. This rearranges pages so that when they are printed on flat sheets and folded, they appear in the correct numberical order.
 
 Our [Bindery Tool](/tool) handles this mathematics for you automatically. Here is how to use it.
 
@@ -21,7 +21,7 @@ Before uploading, ensure your PDF meets these simple criteria:
 
 Navigate to the **Tool** page. You will see a large upload area.
 
-![Upload Interface](/images/tool-tutorial-upload.svg)
+![Upload Interface](/images/diagrams/tool-tutorial-upload.svg)
 
 Drag and drop your PDF file onto the target area, or click "Select PDF" to browse your computer. The tool processes the file locally in your browser—your document is never sent to a server, ensuring privacy.
 
@@ -29,7 +29,7 @@ Drag and drop your PDF file onto the target area, or click "Select PDF" to brows
 
 Once loaded, you will see the configuration panel. These settings determine how your book is constructed.
 
-![Settings Panel](/images/tool-tutorial-settings.svg)
+![Settings Panel](/images/diagrams/tool-tutorial-settings.svg)
 
 #### Sheets per Signature
 This is the most critical setting for binders. A **signature** is a group of folded sheets nested together.
@@ -49,7 +49,7 @@ The **Booklet Preview** visualize how your signatures will look. You can see:
 *   **Signature Count**: How many distinct bundles you will need to sew.
 *   **Blank Pages**: Any blanks added to the end to complete the final signature.
 
-![Imposition Result](/images/tool-tutorial-imposition.svg)
+![Imposition Result](/images/diagrams/tool-tutorial-imposition.svg)
 
 When you are satisfied, click **Download Booklet PDF**.
 

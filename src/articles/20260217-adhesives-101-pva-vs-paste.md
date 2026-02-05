@@ -3,7 +3,7 @@ title: "Adhesives 101: PVA vs. Paste"
 excerpt: "Understanding the chemistry and practical differences between the two most important bookbinding glues."
 category: "Theory"
 date: "Feb 17, 2026"
-image: "/images/20260217-adhesives-101-pva-vs-paste.png"
+image: "/images/covers/20260217-adhesives-101-pva-vs-paste.png"
 ---
 
 Every bookbinder must understand adhesives. The two workhorses of the craft are PVA (polyvinyl acetate) and wheat paste. Each has distinct properties, and knowing when to use which will dramatically improve your bindings.
@@ -28,7 +28,7 @@ PVA is a synthetic polymer adhesive—the white glue you probably already know. 
 - Any application requiring quick setting time
 - Projects where reversibility isn't needed
 
-![Diagram showing PVA molecular structure: chains floating in water vs interlocked when dry](/images/pva-structure.svg)
+![Diagram showing PVA molecular structure: chains floating in water vs interlocked when dry](/images/diagrams/pva-structure.svg)
 
 ### Wheat Paste: The Traditional Choice
 

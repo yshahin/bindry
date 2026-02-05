@@ -3,7 +3,7 @@ title: "Paper Weights & Imposition"
 excerpt: "Understanding GSM, folios, quartos, and how large sheets become book signatures through folding."
 category: "Theory"
 date: "Mar 24, 2026"
-image: "/images/20260324-paper-weights-and-imposition.png"
+image: "/images/covers/20260324-paper-weights-and-imposition.png"
 ---
 
 Before printing and bookmaking merged, paper was always sold in large sheets to be folded into signatures. Understanding paper weights and folding schemes (imposition) connects you to centuries of book history and helps you make better material choices.
@@ -36,7 +36,7 @@ Paper weight is measured in **grams per square meter (GSM)** or **g/m²**. This 
 - Dust jackets: 120-150 gsm
 - Endpapers: 100-140 gsm
 
-![Paper Thickness](/images/paper-thickness-comparison.svg)
+![Paper Thickness](/images/diagrams/paper-thickness-comparison.svg)
 
 ### Traditional Paper Sizes
 
@@ -158,7 +158,7 @@ More complex—pages must be positioned considering both folds:
 - Side 1: Pages 8, 1, 4, 5
 - Side 2: Pages 2, 7, 6, 3
 
-![Imposition Layout](/images/imposition-layout-8page.svg)
+![Imposition Layout](/images/diagrams/imposition-layout-8page.svg)
 
 ### Software for Imposition
 

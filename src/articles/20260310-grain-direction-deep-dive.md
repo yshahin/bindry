@@ -3,7 +3,7 @@ title: "Grain Direction Deep Dive"
 excerpt: "Master the most critical concept in bookbinding: understanding and testing grain direction in paper and board."
 category: "Theory"
 date: "Mar 10, 2026"
-image: "/images/20260310-grain-direction-deep-dive.png"
+image: "/images/covers/20260310-grain-direction-deep-dive.png"
 ---
 
 If there's one rule that separates amateur bookbinding from professional work, it's this: **all materials must have grain running parallel to the spine**. This article explains why, and teaches you multiple methods to test grain direction.
@@ -19,7 +19,7 @@ Paper and board are made of cellulose fibers. During manufacturing, these fibers
 - **Pages cockle:** Wavy, uneven surfaces
 - **Bindings fail:** Stress tears materials apart
 
-![Fiber Expansion](/images/fiber-expansion.svg)
+![Fiber Expansion](/images/diagrams/fiber-expansion.svg)
 
 ### The Cardinal Rule
 
@@ -50,7 +50,7 @@ The most common and reliable method:
 
 **Result:** The sheet bends more easily *with* the grain. More resistance means you're bending *against* the grain.
 
-![Bend Test](/images/grain-bend-test.svg)
+![Bend Test](/images/diagrams/grain-bend-test.svg)
 
 #### Method 2: The Tear Test
 
