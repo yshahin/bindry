@@ -3,7 +3,7 @@ title: "Project: Pamphlet Stitch Booklet"
 excerpt: "Your first complete binding project. Create a simple single-signature notebook with a soft cover in under an hour."
 category: "Beginner"
 date: "Mar 17, 2026"
-image: "bg-green-800"
+image: "/images/20260317-pamphlet-stitch-booklet.png"
 ---
 
 The pamphlet stitch is the simplest form of bookbinding. With just paper, thread, and a needle, you can create a functional notebook. This project teaches fundamental skills that apply to every binding method.

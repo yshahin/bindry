@@ -3,7 +3,7 @@ title: "The Anatomy of a Book"
 excerpt: "A complete visual guide to book structure: signatures, joints, squares, and every part in between."
 category: "Fundamentals"
 date: "Feb 24, 2026"
-image: "bg-stone-600"
+image: "/images/20260224-anatomy-of-a-book.png"
 ---
 
 Before you can make a book, you need to understand how books are built. This guide covers every structural element from the inside out, giving you the vocabulary and understanding to tackle any binding project.

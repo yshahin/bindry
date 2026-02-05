@@ -3,7 +3,7 @@ title: "How to Use the Booklet Imposition Tool"
 excerpt: "A step-by-step guide to transforming your digital PDFs into print-ready signatures for bookbinding."
 category: "Guide"
 date: "Feb 05, 2026"
-image: "bg-amber-100"
+image: "/images/20260205-how-to-use-booklet-tool.png"
 ---
 
 Turning a regular PDF into a physical book requires a process called **Imposition**. This rearranges pages so that when they are printed on flat sheets and folded, they appear in the correct numerical order.

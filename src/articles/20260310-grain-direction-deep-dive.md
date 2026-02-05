@@ -3,7 +3,7 @@ title: "Grain Direction Deep Dive"
 excerpt: "Master the most critical concept in bookbinding: understanding and testing grain direction in paper and board."
 category: "Theory"
 date: "Mar 10, 2026"
-image: "bg-orange-100"
+image: "/images/20260310-grain-direction-deep-dive.png"
 ---
 
 If there's one rule that separates amateur bookbinding from professional work, it's this: **all materials must have grain running parallel to the spine**. This article explains why, and teaches you multiple methods to test grain direction.

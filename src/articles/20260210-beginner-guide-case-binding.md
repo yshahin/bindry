@@ -3,7 +3,7 @@ title: "Beginner's Guide to Case Binding"
 excerpt: "Learn to create a professional hardbound book by understanding the relationship between the cover case and text block."
 category: "Tutorial"
 date: "Feb 10, 2026"
-image: "bg-stone-700"
+image: "/images/20260210-beginner-guide-case-binding.png"
 ---
 
 Case binding is the standard method for creating hardcover books. Unlike other binding methods where the cover attaches directly to the pages, case binding creates the cover (the "case") separately from the text block, then joins them together. This separation is the key to understanding how hardcover books work.

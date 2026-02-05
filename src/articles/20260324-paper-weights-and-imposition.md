@@ -3,7 +3,7 @@ title: "Paper Weights & Imposition"
 excerpt: "Understanding GSM, folios, quartos, and how large sheets become book signatures through folding."
 category: "Theory"
 date: "Mar 24, 2026"
-image: "bg-blue-900"
+image: "/images/20260324-paper-weights-and-imposition.png"
 ---
 
 Before printing and bookmaking merged, paper was always sold in large sheets to be folded into signatures. Understanding paper weights and folding schemes (imposition) connects you to centuries of book history and helps you make better material choices.

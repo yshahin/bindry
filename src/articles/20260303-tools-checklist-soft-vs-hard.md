@@ -3,7 +3,7 @@ title: "Tools Checklist: Soft vs Hard Cover"
 excerpt: "Know what you need before you start. A practical guide to essential tools for different binding styles."
 category: "Tools"
 date: "Mar 03, 2026"
-image: "bg-stone-500"
+image: "/images/20260303-tools-checklist-soft-vs-hard.png"
 ---
 
 The tools you need depend on what you're making. A simple pamphlet requires almost nothing; a full leather binding demands specialized equipment. This guide breaks down the essentials by binding type.
