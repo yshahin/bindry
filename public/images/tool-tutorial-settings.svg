@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <rect width="800" height="400" fill="#f9f5f1" rx="12"/>
+  
+  <!-- UI Panel -->
+  <rect x="200" y="50" width="400" height="300" fill="#ffffff" stroke="#e7e5e4" rx="8" shadow="sm"/>
+  
+  <!-- Control 1: Signature Size -->
+  <text x="230" y="100" font-family="sans-serif" font-size="14" fill="#44403c" font-weight="bold">Sheets per Signature</text>
+  <rect x="230" y="115" width="340" height="6" rx="3" fill="#e7e5e4"/>
+  <circle cx="300" cy="118" r="8" fill="#5d4037"/> <!-- Slider Handle -->
+  <text x="320" y="122" font-family="sans-serif" font-size="12" fill="#78716c">4 Sheets (16 pages)</text>
+
+  <!-- Control 2: Text Direction -->
+  <text x="230" y="160" font-family="sans-serif" font-size="14" fill="#44403c" font-weight="bold">Reading Direction</text>
+  <rect x="230" y="175" width="160" height="32" rx="4" fill="#f5f5f4" stroke="#d6d3d1"/>
+  <rect x="232" y="177" width="78" height="28" rx="3" fill="#ffffff" stroke="#e7e5e4" shadow="sm"/> <!-- Active Toggle -->
+  <text x="271" y="195" font-family="sans-serif" font-size="12" fill="#1c1917" text-anchor="middle" font-weight="bold">LTR</text>
+  <text x="350" y="195" font-family="sans-serif" font-size="12" fill="#a8a29e" text-anchor="middle">RTL</text>
+
+  <!-- Diagram: Signatures -->
+  <rect x="230" y="240" width="40" height="60" fill="#fff" stroke="#5d4037" stroke-width="1"/>
+  <rect x="235" y="240" width="40" height="60" fill="#fff" stroke="#5d4037" stroke-width="1"/>
+  <rect x="240" y="240" width="40" height="60" fill="#fff" stroke="#5d4037" stroke-width="1"/>
+  <text x="300" y="275" font-family="serif" font-size="14" fill="#57534e" font-style="italic">Automatic calculation of signatures...</text>
+
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+</svg>

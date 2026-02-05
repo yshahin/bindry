@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
+import { BrowserRouter } from 'react-router-dom'
 import BookletTool from './BookletTool'
 import * as useBookletStateModule from '../hooks/useBookletState'
 
@@ -50,7 +51,11 @@ describe('BookletTool', () => {
       handleCoverPagesChange: vi.fn(),
     })
 
-    render(<BookletTool />)
+    render(
+      <BrowserRouter>
+        <BookletTool />
+      </BrowserRouter>
+    )
     expect(screen.getByText(/The Bindery Tool/i)).toBeDefined()
     // Using loose text matching for buttons/labels might need refinement if text changes
   })
@@ -105,7 +110,11 @@ describe('BookletTool', () => {
       handleCoverPagesChange: vi.fn(),
     })
 
-    render(<BookletTool />)
+    render(
+      <BrowserRouter>
+        <BookletTool />
+      </BrowserRouter>
+    )
 
     // Check for some control elements
     expect(screen.getByText(/Layout Settings/i)).toBeDefined()
@@ -149,7 +158,11 @@ describe('BookletTool', () => {
       handleCoverPagesChange: vi.fn(),
     })
 
-    render(<BookletTool />)
+    render(
+      <BrowserRouter>
+        <BookletTool />
+      </BrowserRouter>
+    )
     expect(screen.getByText(errorMsg)).toBeDefined()
   })
 })

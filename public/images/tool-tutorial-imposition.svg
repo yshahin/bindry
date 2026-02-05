@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <rect width="800" height="400" fill="#f9f5f1" rx="12"/>
+  
+  <!-- Sheet Representation -->
+  <g transform="translate(200, 100)">
+    <rect x="0" y="0" width="400" height="200" fill="#ffffff" stroke="#5d4037" stroke-width="2"/>
+    <line x1="200" y1="0" x2="200" y2="200" stroke="#d6d3d1" stroke-dasharray="8 4"/>
+    
+    <!-- Left Page (Back) -->
+    <text x="100" y="110" font-family="serif" font-size="48" fill="#d6d3d1" text-anchor="middle">16</text>
+    <text x="100" y="140" font-family="sans-serif" font-size="12" fill="#78716c" text-anchor="middle">Back Page</text>
+
+    <!-- Right Page (Front) -->
+    <text x="300" y="110" font-family="serif" font-size="48" fill="#1c1917" text-anchor="middle">1</text>
+    <text x="300" y="140" font-family="sans-serif" font-size="12" fill="#78716c" text-anchor="middle">Front Page</text>
+  </g>
+
+  <!-- Labels -->
+  <text x="400" y="340" font-family="sans-serif" font-size="16" fill="#44403c" text-anchor="middle" font-weight="bold">Ready for Print (Duplex Short-Edge)</text>
+</svg>

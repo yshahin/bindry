@@ -4,7 +4,8 @@ import ResultsDisplay from '../components/ResultsDisplay'
 import BookletView from '../components/BookletView'
 import { useBookletState } from '../hooks/useBookletState'
 import { useBookletPdfGenerator, downloadPdfBlob } from '../hooks/usePdfGeneration'
-import { Book } from 'lucide-react'
+import { Book, CircleHelp } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function BookletTool() {
   const {
@@ -73,6 +74,15 @@ export default function BookletTool() {
         <p className="text-xl text-stone-600 font-light max-w-2xl mx-auto">
           Calculate optimal signature layouts and generate imposition proofs for hand-bookbinding.
         </p>
+        <div className="flex justify-center">
+          <Link
+            to="/articles/20260205-how-to-use-booklet-tool"
+            className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 border border-stone-200 rounded-full px-4 py-1.5 transition-colors bg-white/50 backdrop-blur-sm hover:bg-white hover:border-stone-300"
+          >
+            <CircleHelp size={16} />
+            <span>New to this? Read the <strong>How-To Guide</strong></span>
+          </Link>
+        </div>
       </header>
 
       <main className="space-y-8 animate-fade-in">

@@ -19,7 +19,7 @@ describe('Home Page', () => {
     expect(screen.getByText(/The Art of/i)).toBeTruthy();
     expect(screen.getByText(/Latest Article/i)).toBeTruthy();
     // Featured video might not show if no videos are found, but we expect at least one
-    // We can't guarantee "Featured Video" text is there if there are no videos, 
+    // We can't guarantee "Featured Video" text is there if there are no videos,
     // but based on my grep earlier, there are videos.
   });
 });
